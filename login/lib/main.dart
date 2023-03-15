@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => HomePage(email: email),
+          builder: (context) => HomePage(),
         ),
       );
     }
@@ -95,10 +95,6 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 class HomePage extends StatefulWidget {
-  final String email;
-
-  HomePage({required this.email});
-
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -278,12 +274,19 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigator.pushAndRemoveUntil(
+          //   context,
+          //   MaterialPageRoute(builder: (context) => HomePage()),
+          //   (Route<dynamic> route) => false,
+          // );
+        },
+        child: Icon(Icons.home),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
@@ -298,7 +301,7 @@ class _HomePageState extends State<HomePage> {
           setState(() {
             _selectedIndex = index;
           });
-          if (index == 2) {
+          if (index == 1) {
             Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => LoginPage()),
@@ -312,7 +315,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class CardDetailsPage extends StatelessWidget {
+class CardDetailsPage extends StatefulWidget {
   final String imageUrl;
   final String title;
 
@@ -322,38 +325,81 @@ class CardDetailsPage extends StatelessWidget {
   });
 
   @override
+  _CardDetailsPageState createState() => _CardDetailsPageState();
+}
+
+class _CardDetailsPageState extends State<CardDetailsPage> {
+  @override
   Widget build(BuildContext context) {
+    int _selectedIndex = 0;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Image.network(
-            imageUrl,
-            height: MediaQuery.of(context).size.height / 2,
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              title,
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Image.network(
+              widget.imageUrl,
+              height: MediaQuery.of(context).size.height / 2,
+              fit: BoxFit.cover,
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                widget.title,
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Text(
-              'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eu felis vitae quam consectetur commodo. In semper felis vel orci molestie, sit amet cursus nisl scelerisque. Vestibulum eget tortor orci. Morbi sit amet lacus ante. Praesent aliquet eros id dolor imperdiet, at hendrerit mi suscipit. Sed a nulla vel leo rutrum pellentesque ut nec massa. Vestibulum euismod eget justo sit amet iaculis.',
-              style: TextStyle(fontSize: 16),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eu felis vitae quam consectetur commodo. In semper felis vel orci molestie, sit amet cursus nisl scelerisque. Vestibulum eget tortor orci. Morbi sit amet lacus ante. Praesent aliquet eros id dolor imperdiet, at hendrerit mi suscipit. Sed a nulla vel leo rutrum pellentesque ut nec massa. Vestibulum euismod eget justo sit amet iaculis.',
+                style: TextStyle(fontSize: 16),
+              ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => HomePage()),
+              (Route<dynamic> route) => false,
+            );
+          },
+          child: Icon(Icons.home),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        bottomNavigationBar: BottomNavigationBar(
+          items: [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.logout),
+              label: 'Logout',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          onTap: (index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+            if (index == 1) {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+                (Route<dynamic> route) => false,
+              );
+            }
+            // navigation logic
+          },
+        ));
   }
 }
