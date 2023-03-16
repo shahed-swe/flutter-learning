@@ -15,19 +15,33 @@ class MyFirstApp extends StatefulWidget {
 class _MyFirstAppState extends State<MyFirstApp> {
   int _answerdQuestion = 0;
 
-  void _answerQuestion(int index) {
+  void _answerQuestion() {
+    print(_answerdQuestion);
     setState(() {
-      _answerdQuestion = index;
+      _answerdQuestion = _answerdQuestion + 1;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    var _question = [
-      'What is your name?',
-      'What is your phone number?',
-      'What is your addresss?',
-      'What is your email?'
+    const questions = [
+      {
+        'question': 'What is your favourite color?',
+        'answer': ['Black', 'Green', 'Blue', 'Orange']
+      },
+      {
+        'question': 'What is your favourite animal?',
+        'answer': ['Cat', 'Tiger', 'Dog', 'Lion']
+      },
+      {
+        'question': 'What is your favourite food?',
+        'answer': [
+          'Shak Shobji',
+          'Bilai er mangsho',
+          'Kuttar Mangsho',
+          'Murgir Pocha kolija'
+        ]
+      },
     ];
 
     return MaterialApp(
@@ -35,20 +49,19 @@ class _MyFirstAppState extends State<MyFirstApp> {
         appBar: AppBar(
           title: const Text('First App'),
         ),
-        body: Column(
-          children: <Widget>[
-            Question(_question[_answerdQuestion]),
-            // ElevatedButton(
-            //   onPressed: () => print("Number 1 Choosen"),
-            //   child: const Text("Answer 1"),
-            // ),
-            for (var i = 0; i < 4; i++) Answer(i, _answerQuestion, _question),
-            // Answer(0,_answerQuestion, _question),
-            // Answer(1,_answerQuestion, _question),
-            // Answer(2,_answerQuestion, _question),
-            // Answer(3,_answerQuestion, _question),
-          ],
-        ),
+        body: _answerdQuestion < questions.length
+            ? Column(
+                children: <Widget>[
+                  Question(questions[_answerdQuestion]['question'].toString()),
+                  ...(questions[_answerdQuestion]['answer'] as List<String>)
+                      .map((answer) {
+                    return Answer(_answerQuestion, answer);
+                  }).toList(),
+                ],
+              )
+            : Center(
+                child: Text("Sultan dine Jindabad"),
+              ),
       ),
     );
   }
